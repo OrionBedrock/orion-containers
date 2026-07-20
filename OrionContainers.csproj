@@ -31,7 +31,7 @@
       <Private>false</Private>
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="$(OrionServerBERoot)/src/Orion/Orion.csproj">
+    <ProjectReference Include="$(OrionServerBERoot)/src/Protocol/Protocol.csproj">
       <Private>false</Private>
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
