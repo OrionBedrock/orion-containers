@@ -43,7 +43,7 @@ jobs:
         run: dotnet build OrionContainers.csproj -c Release
 
   publish:
-    if: github.repository_owner == 'OrionBedrock' || github.repository_owner == 'yPerfectBR'
+    if: github.repository_owner == 'OrionBedrock'
     needs: build
     runs-on: ubuntu-latest
     defaults:
