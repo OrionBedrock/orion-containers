@@ -4,10 +4,13 @@ using Orion.Item;
 using Orion.Protocol.Nbt;
 using Orion.Protocol.Packets;
 using Orion.Protocol.Types;
+using ApiContainer = Orion.Api.Containers.IContainer;
+using ApiContainerType = Orion.Api.Containers.ContainerType;
+using ApiItemStack = Orion.Api.Items.IItemStack;
 
 using Player = Orion.Player.Player;
 
-public class Container : IContainer
+public class Container : IContainer, ApiContainer
 {
 
     // A list of all the players that are vewing the container
@@ -20,6 +23,35 @@ public class Container : IContainer
 
     public int EmptySlotsCount => Storage.Count(static item => item is null);
     public bool IsFull => EmptySlotsCount == 0;
+
+    ApiContainerType ApiContainer.Type => Type switch
+    {
+        ContainerType.Inventory or ContainerType.Hud => ApiContainerType.Inventory,
+        ContainerType.Hand => ApiContainerType.Hotbar,
+        _ => ApiContainerType.Container
+    };
+
+    ApiItemStack? ApiContainer.GetItem(int slot) => GetItem(slot);
+
+    void ApiContainer.SetItem(int slot, ApiItemStack item)
+    {
+        if (item is not ItemStack stack)
+        {
+            throw new ArgumentException("Item must be an Orion.Item.ItemStack.", nameof(item));
+        }
+
+        SetItem(slot, stack);
+    }
+
+    bool ApiContainer.AddItem(ApiItemStack item)
+    {
+        if (item is not ItemStack stack)
+        {
+            return false;
+        }
+
+        return AddItem(stack);
+    }
 
     public Container(ContainerType type, int size)
     {
